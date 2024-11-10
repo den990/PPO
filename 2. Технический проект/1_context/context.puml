@@ -1,0 +1,31 @@
+@startuml Диаграмма контекста
+title "C4. Контекст"
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
+!include $ICONURL/common.puml
+!include $ICONURL/devicons/go.puml
+
+Person(client, "Клиент", "Делает заказ такси, отслеживает движение и оценивает водителя.")
+Person(driver, "Водитель", "Принимает заказы, использует навигацию для маршрута.")
+Person(admin, "Администратор", "Управление учетными записями водителей, анализ данных о поездках.")
+Person(support, "Тех. Поддержка", "Обрабатывает жалобы и проблемы пользователей.")
+Person(sysadmin, "Системный администратор", "Обеспечивает работу и безопасность системы.")
+
+System(taxiService, "Система Такси", "Обслуживает пользователей, водителей, администраторов и другие системы.")
+Rel(client, taxiService, "Использует")
+Rel(driver, taxiService, "Использует")
+Rel(admin, taxiService, "Управляет")
+Rel(support, taxiService, "Обрабатывает запросы")
+Rel(sysadmin, taxiService, "Обслуживает инфраструктуру")
+
+System_Ext(paymentSystem, "Платежная система", "Обработка платежей клиентов и зачисление средств водителям.")
+Rel(taxiService, paymentSystem, "Передает данные о платеже")
+
+System_Ext(orderSystem, "Система распределения заказов", "Определяет ближайших водителей и распределяет заказы.")
+Rel(taxiService, orderSystem, "Передает данные о заказах")
+
+System_Ext(docControl, "Система фотоконтроля", "Проверка документов водителей и их автомобилей.")
+Rel(taxiService, docControl, "Передает фото и документы")
+
+@enduml
