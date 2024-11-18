@@ -29,7 +29,8 @@ System_Boundary(taxiService, "Такси Сервис") {
     Container(support_service, "Сервис поддержки", "Go", $sprite="go")
     Container(destribution_service, "Сервис распределения заказов  такси", "Go", $sprite="go")
     Container(rating_service, "Сервис рейтинга", "Go", $sprite="go")
-    Container(analytic_service, "Сервис аналитики", "Go", $sprite="go")
+    Container(analytic_service, "Сервис аналитики <С+В3", "Go", $sprite="go")
+    Container(tarif_service, "Сервис тарификации", "Go", $sprite="go")
 }
 System_Ext(email, "Email сервис", "отправка уведомлений")
 System_Ext(geocoder, "Геокодер", "Предоставление адреса по координатам, и наоборот")
@@ -56,6 +57,7 @@ Rel(auth_service, users_service, "API вызовы", "REST API")
 Rel(auth_service, order_service, "API вызовы", "REST API")
 Rel(auth_service, rating_service, "API вызовы", "REST API")
 Rel(auth_service, analytic_service, "API вызовы", "REST API")
+Rel(auth_service, tarif_service, "API вызовы", "REST API")
 
 Rel(order_service, map_service, "Получает данные для отображение карты /маршрута", "REST API")
 Rel(order_service, payment_system, "Производит оплату", "REST API")
@@ -74,9 +76,11 @@ Rel(users_service, database, "Запись/чтение данных")
 Rel(destribution_service, database, "Запись/чтение данных")
 Rel(rating_service, database, "Запись/чтение данных")
 Rel(analytic_service, database, "Запись/чтение данных")
+Rel(tarif_service, database, "Запись/чтение данных")
 
 Rel(order_service, geocoder, "Получает данные по местоположению клиента/водителя")
 
 Rel(order_service, destribution_service, "API вызовы", "REST API")
 
 Rel(notification_service, email, "API вызовы", "REST API")
+
