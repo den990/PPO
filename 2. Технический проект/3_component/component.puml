@@ -1,62 +1,73 @@
-@startuml API. Диаграмма компонентов
-title "C4. Компоненты"
+@startuml Диаграмма_Компонентов
+title "C4. Компоненты - Такси Сервис"
 
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 !$ICONURL = "https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/v3.0.0/icons"
-!include $ICONURL/common.puml
 !include $ICONURL/devicons/react.puml
 !include $ICONURL/devicons/go.puml
+!include $ICONURL/devicons/postgresql.puml
 !include $ICONURL/devicons2/sqlite.puml
 
-Component(frontend, "Мобильное приложение", "React Native", $sprite="react")
-
-System_Boundary(taxiService, "API") {
-
-  Component(orderController, "OrderController", "Go", "Управление заказами")
-  Rel(frontend, orderController, "")
-  Component(orderService, "OrderService", "Go", "Обработка заказов")
-  Rel(orderController, orderService, "")
-  Component(driverRepository, "DriverRepository", "Go", "Информация о водителях")
-  Rel(orderService, driverRepository, "")
-  
-  Component(paymentController, "PaymentController", "Go", "Обработка платежей")
-  Rel(frontend, paymentController, "")
-  Component(paymentService, "PaymentService", "Go", "Обработка транзакций")
-  Rel(paymentController, paymentService, "")
-  Component(paymentRepository, "PaymentRepository", "Go", "История платежей")
-  Rel(paymentService, paymentRepository, "")
-
-  Component(photoControlController, "PhotoControlController", "Go", "Отправка фото документов")
-  Rel(frontend, photoControlController, "")
-  Component(photoControlService, "PhotoControlService", "Go", "Обработка фото документов")
-  Rel(photoControlController, photoControlService, "")
-
-  Component(userController, "UserController", "Go", "Управление пользователями")
-  Rel(frontend, userController, "")
-  Component(userService, "UserService", "Go", "Регистрация и аутентификация пользователей")
-  Rel(userController, userService, "")
-  Component(userRepository, "UserRepository", "Go", "Информация о пользователях")
-  Rel(userService, userRepository, "")
-  
-  Component(loggingController, "LoggingController", "Go", "Запись логов")
-  Rel(orderService, loggingController, "")
-  Rel(paymentService, loggingController, "")
-  Rel(photoControlService, loggingController, "")
-  Rel(loggingController, loggingService, "Записывает события", "HTTPS/REST")
-
-  Component(analyticsController, "AnalyticsController", "Go", "Получение аналитики")
-  Rel(admin, analyticsController, "")
-  Component(analyticsService, "AnalyticsService", "Go", "Обработка аналитики")
-  Rel(analyticsController, analyticsService, "")
+Container_Boundary(frontend_passanger, "Мобильное приложение (React Native)") {
+    Component(ui_client, "UI Клиента", "React Native", "Интерфейс для клиента")
+    Component(network_client, "Сетевой клиент", "React Native", "Взаимодействует с REST API сервиса")
+    Component(map_viewer, "Отображение карты", "React Native", "Работа с картами через Map API")
 }
 
-System_Ext(paymentSystem, "Платежная система", "Обработка платежей")
-Rel(paymentService, paymentSystem, "Обработка транзакций", "HTTPS/REST")
+Container_Boundary(web_app, "Мультистраничное Web-приложение") {
+    Component(ui_admin, "UI Администратора", "React", "Интерфейс администратора")
+    Component(network_admin, "Сетевой клиент", "React", "Взаимодействует с REST API сервиса")
+}
 
-System_Ext(orderDistribution, "Система распределения заказов", "Распределение заказов среди водителей")
-Rel(orderService, orderDistribution, "Отправка информации о заказах", "HTTPS/REST")
+Container_Boundary(auth_service, "Шлюз авторизации и аутентификации") {
+    Component(auth_controller, "Контроллер авторизации", "Go", "Обработка запросов аутентификации")
+    Component(token_generator, "Генератор токенов", "Go", "Создание JWT токенов")
+    Component(auth_db_connector, "Соединение с базой данных", "Go", "Чтение и запись данных пользователей")
+}
 
-System_Ext(photoControl, "Система фотоконтроля", "Отправка фото документов водителями")
-Rel(photoControlService, photoControl, "Отправка фото документов", "HTTPS/REST")
+Container_Boundary(order_service, "Сервис заказа такси") {
+    Component(order_controller, "Контроллер заказов", "Go", "Обработка запросов на заказ такси")
+    Component(order_matcher, "Модуль поиска", "Go", "Поиск подходящих водителей")
+    Component(order_db_connector, "Соединение с базой данных", "Go", "Чтение/запись данных о заказах")
+}
 
+Container_Boundary(photoControlService, "Сервис фотоконтроля") {
+    Component(photo_validator, "Валидатор фотографий", "Go", "Проверка отправленных фото на валидность")
+    Component(photo_storage, "Хранилище фотографий", "Go", "Хранение и предоставление фото")
+}
+
+Container_Boundary(notification_service, "Сервис уведомлений") {
+    Component(email_sender, "Отправка Email", "Go", "Интеграция с Email API")
+    Component(push_sender, "Отправка Push-уведомлений", "Go", "Интеграция с Push API")
+}
+
+Container_Boundary(database, "База данных (PostgreSQL)") {
+    Component(user_data, "Данные пользователей", "PostgreSQL", "Хранение информации о клиентах и водителях")
+    Component(order_data, "Данные заказов", "PostgreSQL", "Хранение информации о поездках")
+    Component(log_data, "Логи системы", "PostgreSQL", "Хранение системных логов")
+}
+
+System_Ext(map_service, "Сервисы карт (например, Яндекс.Карты)", "REST API") {
+    Component(map_api, "API для карт", "REST", "Предоставление маршрутов и информации о местоположении")
+}
+
+Rel(ui_client, network_client, "Обработка событий пользователя")
+Rel(network_client, auth_service, "Аутентификация", "REST API")
+Rel(network_client, map_service, "Запрос карты", "REST API")
+
+Rel(ui_admin, network_admin, "Обработка действий администратора")
+Rel(network_admin, auth_service, "Аутентификация", "REST API")
+
+Rel(auth_controller, token_generator, "Создание токенов")
+Rel(auth_controller, auth_db_connector, "Работа с базой данных")
+
+Rel(order_controller, order_matcher, "Поиск водителей")
+Rel(order_controller, order_db_connector, "Запись/чтение данных о заказах")
+
+Rel(photo_validator, photo_storage, "Хранение валидных фото")
+
+Rel(email_sender, map_service, "Отправка маршрутов по Email")
+Rel(push_sender, map_service, "Отправка уведомлений")
+
+Rel(user_data, order_data, "Связь данных клиентов с заказами")
 @enduml
