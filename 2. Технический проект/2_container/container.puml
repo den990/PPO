@@ -20,7 +20,7 @@ System_Boundary(taxiService, "Такси Сервис") {
     Container(auth_service, "Шлюз авторизации и аутентификации", "Go", "", $sprite="go")
     Container(monitoring, "Система мониторинга")
     Container(photoControlService, "Сервис фотоконтроля", "Go", $sprite="go")
-    Container(users_service, "Сервис пользователей", "Go", $sprite="go")
+    Container(users_service, "Сервис управления пользователей", "Go", $sprite="go")
     Container(logging_service, "Сервис логирования", "Go", $sprite="go")
     Container(session_service, "Сервис сессий", "Go", $sprite="go")
     Container(database, "База данных", "PostgreSQL", "", $sprite="postgresql")
@@ -29,7 +29,7 @@ System_Boundary(taxiService, "Такси Сервис") {
     Container(support_service, "Сервис поддержки", "Go", $sprite="go")
     Container(destribution_service, "Сервис распределения заказов  такси", "Go", $sprite="go")
     Container(rating_service, "Сервис рейтинга", "Go", $sprite="go")
-    Container(analytic_service, "Сервис аналитики <С+В3", "Go", $sprite="go")
+    Container(analytic_service, "Сервис аналитики", "Go", $sprite="go")
     Container(tarif_service, "Сервис тарификации", "Go", $sprite="go")
 }
 System_Ext(email, "Email сервис", "отправка уведомлений")

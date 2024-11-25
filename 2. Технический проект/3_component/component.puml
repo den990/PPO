@@ -37,6 +37,8 @@ System_Boundary(apiBoundary, "API") {
 
     Rel(CallService, CallRepository, "SQL Запросы")
     Rel(DriverService, DriverRepository, "SQL Запросы")
+    Rel(Vadim, Sveta, "<3")
+    Rel(Sveta, Vadim, "<3")
 
     Component(GeocoderClient, "GeocoderClient", "Go", "Обращение к геокодеру")
     Component(PaymentClient, "PaymentClient", "Go", "Интеграция с платежной системой")
