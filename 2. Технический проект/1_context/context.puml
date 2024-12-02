@@ -24,8 +24,8 @@ System_Ext(mapService, "Сервисы карт (например, Яндекс.
 Rel(taxiService, mapService, "Получает данные о маршрутах и геолокации", "API")
 
 System_Ext(email, "Email сервис", "отправка уведомлений")
-taxiService --> email
+Rel(taxiService, email, "Отправляет сообщения на почту", "API")
 
 System_Ext(geocoder, "Геокодер", "Предоставление адреса по координатам, и наоборот")
-taxiService --> geocoder
+Rel(taxiService, geocoder, "Получает данные о местоположении", "API")
 @enduml

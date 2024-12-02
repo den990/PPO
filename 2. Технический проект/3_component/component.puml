@@ -7,9 +7,9 @@ title "C4. Компоненты - Микросервис вызова такси
 !include $ICONURL/devicons/go.puml
 !include $ICONURL/devicons/postgresql.puml
 
-Component(taxiCallMicroservice, "Микросервис вызова такси", "Go", $sprite="go")
+Component(taxiCallMicroservice, "Клиент", "Go", $sprite="go")
 
-System_Boundary(apiBoundary, "API") {
+System_Boundary(apiBoundary, "Микросервис вызова такси") {
 
     Component(CallController, "CallController", "Go", "Управление вызовами такси")
     Component(DriverController, "DriverController", "Go", "Управление данными о водителях")
@@ -37,8 +37,6 @@ System_Boundary(apiBoundary, "API") {
 
     Rel(CallService, CallRepository, "SQL Запросы")
     Rel(DriverService, DriverRepository, "SQL Запросы")
-    Rel(Vadim, Sveta, "<3")
-    Rel(Sveta, Vadim, "<3")
 
     Component(GeocoderClient, "GeocoderClient", "Go", "Обращение к геокодеру")
     Component(PaymentClient, "PaymentClient", "Go", "Интеграция с платежной системой")

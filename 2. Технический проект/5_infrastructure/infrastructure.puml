@@ -56,15 +56,22 @@ package "Яндекс.Облако" as cloud {
     Container(kafka, "Брокер сообщений", "Apache Kafka", "Асинхронная обработка событий между сервисами")
 }
 
-package "Database Server" as database {
-    package "Region 1" as region1 {
-        Container(database_r1_master, "PostgreSQL Master", "PostgreSQL", "Основная база данных для региона 1")
-        Container(database_r1_replica, "PostgreSQL Replica", "PostgreSQL", "Реплика базы данных для региона 1")
+package "Database Servers (Sharded)" as database {
+    Container(meta_database, "Meta Database", "PostgreSQL", "Каталог шардов и реплик для маршрутизации запросов")
+
+    package "Shard Москва" as shard_moscow {
+        Container(shard_moscow_master, "PostgreSQL Master", "PostgreSQL", "Основная база данных для Москвы")
+        Container(shard_moscow_replica, "PostgreSQL Replica", "PostgreSQL", "Реплика базы данных для Москвы")
     }
 
-    package "Region n" as regionn {
-        Container(database_rn_master, "PostgreSQL Master", "PostgreSQL", "Основная база данных для региона n")
-        Container(database_rn_replica, "PostgreSQL Replica", "PostgreSQL", "Реплика базы данных для региона n")
+    package "Shard Санкт-Петербург" as shard_spb {
+        Container(shard_spb_master, "PostgreSQL Master", "PostgreSQL", "Основная база данных для Санкт-Петербурга")
+        Container(shard_spb_replica, "PostgreSQL Replica", "PostgreSQL", "Реплика базы данных для Санкт-Петербурга")
+    }
+
+    package "Shard Татарстан (Казань)" as shard_kazan {
+        Container(shard_kazan_master, "PostgreSQL Master", "PostgreSQL", "Основная база данных для Татарстана")
+        Container(shard_kazan_replica, "PostgreSQL Replica", "PostgreSQL", "Реплика базы данных для Татарстана")
     }
 }
 
@@ -98,6 +105,6 @@ Rel(k8s_cluster, kafka, "Публикация событий о авториза
 
 k8s_cluster ---[hidden]---> database
 
-payment_service ---[hidden]---> payment_system
+
 auth_service ---[hidden]---> email
 @enduml
