@@ -11,26 +11,19 @@ Component(taxiCallMicroservice, "Клиент", "Go", $sprite="go")
 
 System_Boundary(apiBoundary, "Микросервис вызова такси") {
 
-    Component(CallController, "CallController", "Go", "Управление вызовами такси")
-    Component(DriverController, "DriverController", "Go", "Управление данными о водителях")
-    Component(DispatchController, "DispatchController", "Go", "Распределение водителей на вызов")
-
-    Rel(taxiCallMicroservice, CallController, "REST API")
-    Rel(taxiCallMicroservice, DriverController, "REST API")
-    Rel(taxiCallMicroservice, DispatchController, "REST API")
+    Component(CallDispatchController, "CallDispatchController", "Go", "Управление вызовами и распределение водителей")
+    Rel(taxiCallMicroservice, CallDispatchController, "REST API")
 
     Component(CallService, "CallService", "Go", "Обработка вызовов такси")
     Component(DriverService, "DriverService", "Go", "Управление водителями")
-    Component(DispatchService, "DispatchService", "Go", "Распределение водителей по запросам")
     Component(PriceCalculationService, "PriceCalculationService", "Go", "Расчет стоимости поездок")
     Component(NotificationService, "NotificationService", "Go", "Уведомление пользователей о статусе вызова")
 
-    Rel(CallController, CallService, "Запросы на создание вызова")
-    Rel(DriverController, DriverService, "Запросы данных о водителях")
-    Rel(DispatchController, DispatchService, "Запросы на распределение")
+    Rel(CallDispatchController, CallService, "Запросы на создание вызова")
+    Rel(CallDispatchController, DriverService, "Запросы данных о водителях")
     Rel(CallService, PriceCalculationService, "Расчет стоимости поездки")
     Rel(CallService, NotificationService, "Отправка уведомлений клиенту")
-    Rel(DispatchService, DriverService, "Получение списка доступных водителей")
+    Rel(DriverService, DriverService, "Получение списка доступных водителей")
 
     Component(CallRepository, "CallRepository Interface", "Go", "Интерфейс хранения данных вызовов")
     Component(DriverRepository, "DriverRepository Interface", "Go", "Интерфейс хранения данных о водителях")
