@@ -26,7 +26,6 @@ System_Boundary(taxiService, "Такси Сервис") {
         Container(notification_service, "Сервис уведомлений", "Go", $sprite="go")
         Container(order_service, "Сервис заказа такси", "Go", $sprite="go")
         Container(support_service, "Сервис поддержки", "Go", $sprite="go")
-        Container(destribution_service, "Сервис распределения заказов  такси", "Go", $sprite="go")
         Container(rating_service, "Сервис рейтинга", "Go", $sprite="go")
         Container(analytic_service, "Сервис аналитики", "Go", $sprite="go")
         Container(tarif_service, "Сервис тарификации", "Go", $sprite="go")
