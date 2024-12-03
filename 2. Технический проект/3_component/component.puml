@@ -32,17 +32,21 @@ System_Boundary(apiBoundary, "Микросервис вызова такси") {
     Rel(CallService, NotificationService, "Отправка уведомлений клиенту")
     Rel(DispatchService, DriverService, "Получение списка доступных водителей")
 
-    Component(CallRepository, "CallRepository", "Go", "Хранение данных вызовов", $sprite="postgresql")
-    Component(DriverRepository, "DriverRepository", "Go", "Хранение данных о водителях", $sprite="postgresql")
+    Component(CallRepository, "CallRepository Interface", "Go", "Интерфейс хранения данных вызовов")
+    Component(DriverRepository, "DriverRepository Interface", "Go", "Интерфейс хранения данных о водителях")
+    Component(GeocoderService, "GeocoderService Interface", "Go", "Интерфейс геокодера")
+    Component(PaymentService, "PaymentService Interface", "Go", "Интерфейс интеграции с платежной системой")
 
-    Rel(CallService, CallRepository, "SQL Запросы")
-    Rel(DriverService, DriverRepository, "SQL Запросы")
+    Rel(CallService, CallRepository, "Использует интерфейс для запросов")
+    Rel(DriverService, DriverRepository, "Использует интерфейс для запросов")
+    Rel(CallService, GeocoderService, "Использует интерфейс для получения координат")
+    Rel(CallService, PaymentService, "Использует интерфейс для оплаты")
 
-    Component(GeocoderClient, "GeocoderClient", "Go", "Обращение к геокодеру")
-    Component(PaymentClient, "PaymentClient", "Go", "Интеграция с платежной системой")
-
-    Rel(CallService, GeocoderClient, "Определение местоположения клиента", "REST API")
-    Rel(CallService, PaymentClient, "Инициирование оплаты поездки", "REST API")
+    Component(GeocoderClient, "GeocoderClient", "Go", "Конкретная реализация геокодера")
+    Component(PaymentClient, "PaymentClient", "Go", "Конкретная реализация платежной системы")
+    
+    Rel(GeocoderClient, GeocoderService, "Реализация интерфейса")
+    Rel(PaymentClient, PaymentService, "Реализация интерфейса")
 }
 
 System_Ext(geocoder, "Геокодер", "Определение координат и адресов")
